@@ -12,6 +12,8 @@ server/.env
 # Logs
 logs/
 *.log
+*.db-wal
+*.db-shm
 npm-debug.log*
 yarn-debug.log*
 

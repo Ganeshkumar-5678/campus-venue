@@ -5,11 +5,14 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "build": "npm --prefix client run build",
-    "install:all": "npm --prefix server install && npm --prefix client install",
+    "build": "npm --prefix client install && npm --prefix client run build",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
     "client": "npm --prefix client run dev",
     "server": "npm --prefix server start",
     "seed": "node server/seed.js"
+  },
+  "engines": {
+    "node": "22.x"
   },
   "keywords": [
     "college",
@@ -19,5 +22,12 @@
     "voice-booking"
   ],
   "author": "DRBCCC Hindu College",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^10.6.0"
+  }
 }

@@ -2,17 +2,37 @@ const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 const fs = require('fs');
 
-const dbDir = path.join(__dirname, 'data');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+let dbDir = path.join(__dirname, 'data');
+let dbPath = path.join(dbDir, 'campus_venue.db');
+
+if (isVercel) {
+  const tmpPath = path.join('/tmp', 'campus_venue.db');
+  if (!fs.existsSync(tmpPath)) {
+    if (fs.existsSync(dbPath)) {
+      try {
+        fs.copyFileSync(dbPath, tmpPath);
+      } catch (err) {
+        console.warn('Could not copy db to /tmp, will initialize fresh:', err);
+      }
+    }
+  }
+  dbPath = tmpPath;
+} else {
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
 }
 
-const dbPath = path.join(dbDir, 'campus_venue.db');
 const db = new DatabaseSync(dbPath);
 
 // Enable Foreign Keys & WAL mode for performance and integrity
 db.exec('PRAGMA foreign_keys = ON;');
-db.exec('PRAGMA journal_mode = WAL;');
+try {
+  db.exec('PRAGMA journal_mode = WAL;');
+} catch (e) {
+  db.exec('PRAGMA journal_mode = DELETE;');
+}
 
 function initSchema() {
   // 1. COLLEGE_PROFILE

@@ -30,9 +30,38 @@ const JWT_SECRET = process.env.JWT_SECRET || 'drbccc_campus_venue_secret_key_202
 app.use(cors());
 app.use(express.json());
 
-// Initialize schema on startup
+// Normalize request URLs so that both /api/xxx and /xxx match Express handlers
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api') && !req.url.startsWith('/images') && !req.url.startsWith('/assets')) {
+    req.url = '/api' + req.url;
+  }
+  next();
+});
+
+// Initialize schema and auto-seed if empty
 initSchema();
-startReminderScheduler();
+try {
+  const profileCount = db.prepare('SELECT COUNT(*) as count FROM college_profile').get()?.count || 0;
+  if (profileCount === 0) {
+    const { seed } = require('./seed');
+    seed();
+  }
+} catch (e) {
+  console.warn('Auto-seed check error:', e);
+}
+
+// Start scheduler only when running standalone daemon
+if (require.main === module) {
+  startReminderScheduler();
+}
+
+app.get('/api', (req, res) => {
+  res.json({ status: 'ok', service: 'DRBCCC CampusVenue Backend API', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', service: 'DRBCCC CampusVenue Backend API', timestamp: new Date().toISOString() });
+});
 
 // Helper to extract authenticated user from header
 function getAuthUser(req) {
@@ -1182,7 +1211,7 @@ if (fs.existsSync(clientDist)) {
   });
 }
 
-if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
+if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`DRBCCC CampusVenue Backend Service running on http://localhost:${PORT}`);
   });

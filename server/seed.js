@@ -358,7 +358,11 @@ async function seed() {
   console.log('--- Successfully seeded DRBCCC Hindu College database! ---');
 }
 
-seed().catch(err => {
-  console.error('Seeding error:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  seed().catch(err => {
+    console.error('Seeding error:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { seed };
