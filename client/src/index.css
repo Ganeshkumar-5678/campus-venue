@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+  }
+}
+
+.voice-pulse {
+  animation: pulseGlow 2s infinite;
+}
+
+/* =========================================================
+   OFFICIAL PRINT STYLING (A4 STRICT SINGLE-PAGE PRINTING)
+========================================================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Global print hiding for non-printable chrome */
+  nav,
+  aside,
+  header,
+  footer,
+  .print\:hidden,
+  button,
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* ---------------------------------------------------------
+     TASK 1: OFFICIAL VENUE ALLOCATION RECEIPT PRINT STYLING
+     Ensure ONLY the official receipt prints on exactly 1 page
+  --------------------------------------------------------- */
+  body:has(#booking-receipt-modal) > *:not(#root),
+  body:has(#booking-receipt-modal) header,
+  body:has(#booking-receipt-modal) nav,
+  body:has(#booking-receipt-modal) aside,
+  body:has(#booking-receipt-modal) footer,
+  body:has(#booking-receipt-modal) main > *:not(#booking-receipt-modal):not(:has(#booking-receipt-modal)),
+  body:has(#booking-receipt-modal) .max-w-5xl > *:not(#booking-receipt-modal):not(:has(#booking-receipt-modal)) {
+    display: none !important;
+  }
+
+  #booking-receipt-modal {
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  #booking-receipt-modal > div {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: transparent !important;
+  }
+
+  .receipt-print-area,
+  #booking-receipt-printable {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 190mm !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .receipt-section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* ---------------------------------------------------------
+     TASK 2: PROGRAMME HISTORY FIRST A4 PAGE PRINT STYLING
+  --------------------------------------------------------- */
+  #programme-history-view {
+    display: block !important;
+    width: 100% !important;
+    max-width: 190mm !important;
+    max-height: 270mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+
+  #programme-history-view .programme-history-header-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 0 8px 0 !important;
+    margin-bottom: 8px !important;
+    border-bottom: 2px solid #0b2545 !important;
+    background: transparent !important;
+  }
+
+  /* Hide search form & filters in print mode */
+  #programme-history-view form {
+    display: none !important;
+  }
+
+  #programme-history-view .programme-history-table-card {
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+    max-height: 235mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    background: #ffffff !important;
+  }
+
+  #programme-history-view table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 8.5pt !important;
+    table-layout: fixed !important;
+  }
+
+  #programme-history-view thead {
+    display: table-header-group !important;
+  }
+
+  #programme-history-view tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  #programme-history-view th,
+  #programme-history-view td {
+    padding: 6px 8px !important;
+    vertical-align: middle !important;
+  }
+
+  /* Hide action buttons column */
+  #programme-history-view th:last-child,
+  #programme-history-view td:last-child {
+    display: none !important;
+  }
+}

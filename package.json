@@ -1,0 +1,23 @@
+{
+  "name": "drbccc-campus-venue",
+  "version": "1.0.0",
+  "description": "Smart College Hall Booking & Venue Management System for DRBCCC Hindu College",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "build": "npm --prefix client run build",
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "client": "npm --prefix client run dev",
+    "server": "npm --prefix server start",
+    "seed": "node server/seed.js"
+  },
+  "keywords": [
+    "college",
+    "venue-booking",
+    "drbccc",
+    "campus-venue",
+    "voice-booking"
+  ],
+  "author": "DRBCCC Hindu College",
+  "license": "ISC"
+}

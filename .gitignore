@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Local Environment Variables
+.env
+client/.env
+server/.env
+*.env.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# System & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary generated test files
+server/test_*.js
+server/test_*.html
+server/test_*.pdf
+server/test_*.png
+server/check_*.js
+server/create_zip.js
+server/take_screenshot.js
+server/receipt_*.html
+server/receipt_*.pdf
+server/receipt_*.png
+server/programme_history_*.html
+server/programme_history_*.pdf
+server/programme_history_*.png
