@@ -1,5 +1,3 @@
-const app = require('../server/server.js');
+const handler = require('./index.js');
 
-module.exports = (req, res) => {
-  return app(req, res);
-};
+module.exports = handler;

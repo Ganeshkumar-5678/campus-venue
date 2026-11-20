@@ -41,7 +41,15 @@ try {
 // Enable Foreign Keys & Performance PRAGMAs
 try {
   db.exec('PRAGMA foreign_keys = ON;');
-  db.exec('PRAGMA journal_mode = WAL;');
+  if (isVercel) {
+    db.exec('PRAGMA journal_mode = MEMORY;');
+  } else {
+    try {
+      db.exec('PRAGMA journal_mode = WAL;');
+    } catch (_) {
+      db.exec('PRAGMA journal_mode = DELETE;');
+    }
+  }
 } catch (e) {
   try { db.exec('PRAGMA journal_mode = DELETE;'); } catch (_) {}
 }

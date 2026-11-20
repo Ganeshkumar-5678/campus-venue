@@ -4,10 +4,6 @@
   "outputDirectory": "client/dist",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api"
-    },
-    {
       "source": "/((?!api|assets|images|favicon.ico).*)",
       "destination": "/index.html"
     }
