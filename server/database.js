@@ -1,37 +1,49 @@
 const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-let dbDir = path.join(__dirname, 'data');
-let dbPath = path.join(dbDir, 'campus_venue.db');
 
-if (isVercel) {
-  const tmpPath = path.join('/tmp', 'campus_venue.db');
-  if (!fs.existsSync(tmpPath)) {
-    if (fs.existsSync(dbPath)) {
+let db;
+try {
+  if (isVercel) {
+    const tmpDir = os.tmpdir();
+    const tmpPath = path.join(tmpDir, 'campus_venue.db');
+    const localDbPath = path.join(__dirname, 'data', 'campus_venue.db');
+
+    if (!fs.existsSync(tmpPath) && fs.existsSync(localDbPath)) {
       try {
-        fs.copyFileSync(dbPath, tmpPath);
-      } catch (err) {
-        console.warn('Could not copy db to /tmp, will initialize fresh:', err);
+        fs.copyFileSync(localDbPath, tmpPath);
+      } catch (e) {
+        console.warn('Could not copy db to tmpdir:', e.message);
       }
     }
+
+    if (fs.existsSync(tmpPath)) {
+      db = new DatabaseSync(tmpPath);
+    } else {
+      db = new DatabaseSync(':memory:');
+    }
+  } else {
+    const dbDir = path.join(__dirname, 'data');
+    if (!fs.existsSync(dbDir)) {
+      fs.mkdirSync(dbDir, { recursive: true });
+    }
+    const dbPath = path.join(dbDir, 'campus_venue.db');
+    db = new DatabaseSync(dbPath);
   }
-  dbPath = tmpPath;
-} else {
-  if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
-  }
+} catch (e) {
+  console.warn('Falling back to in-memory SQLite database:', e.message);
+  db = new DatabaseSync(':memory:');
 }
 
-const db = new DatabaseSync(dbPath);
-
-// Enable Foreign Keys & WAL mode for performance and integrity
-db.exec('PRAGMA foreign_keys = ON;');
+// Enable Foreign Keys & Performance PRAGMAs
 try {
+  db.exec('PRAGMA foreign_keys = ON;');
   db.exec('PRAGMA journal_mode = WAL;');
 } catch (e) {
-  db.exec('PRAGMA journal_mode = DELETE;');
+  try { db.exec('PRAGMA journal_mode = DELETE;'); } catch (_) {}
 }
 
 function initSchema() {

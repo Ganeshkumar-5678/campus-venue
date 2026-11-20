@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { db, initSchema, logAudit } = require('./database');
 
-async function seed() {
+function seed() {
   console.log('--- Initializing Database Schema ---');
   initSchema();
 
@@ -136,11 +136,11 @@ async function seed() {
   `);
 
   const saltRounds = 10;
-  const adminHash = await bcrypt.hash('admin123', saltRounds);
-  const csaHash = await bcrypt.hash('csa123', saltRounds);
-  const phyHash = await bcrypt.hash('phy123', saltRounds);
-  const bcomHash = await bcrypt.hash('bcom123', saltRounds);
-  const mathHash = await bcrypt.hash('math123', saltRounds);
+  const adminHash = bcrypt.hashSync('admin123', saltRounds);
+  const csaHash = bcrypt.hashSync('csa123', saltRounds);
+  const phyHash = bcrypt.hashSync('phy123', saltRounds);
+  const bcomHash = bcrypt.hashSync('bcom123', saltRounds);
+  const mathHash = bcrypt.hashSync('math123', saltRounds);
 
   // 1. Admin user
   const adminUser = insertUser.run(
@@ -359,10 +359,12 @@ async function seed() {
 }
 
 if (require.main === module) {
-  seed().catch(err => {
+  try {
+    seed();
+  } catch (err) {
     console.error('Seeding error:', err);
     process.exit(1);
-  });
+  }
 }
 
 module.exports = { seed };
