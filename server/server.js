@@ -32,8 +32,11 @@ app.use(express.json());
 
 // Normalize request URLs so that both /api/xxx and /xxx match Express handlers
 app.use((req, res, next) => {
-  if (!req.url.startsWith('/api') && !req.url.startsWith('/images') && !req.url.startsWith('/assets')) {
-    req.url = '/api' + req.url;
+  const originalUrl = req.headers['x-matched-path'] || req.headers['x-vercel-matched-path'];
+  if (originalUrl && originalUrl.startsWith('/api')) {
+    req.url = originalUrl;
+  } else if (!req.url.startsWith('/api') && !req.url.startsWith('/images') && !req.url.startsWith('/assets')) {
+    req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
   }
   next();
 });
