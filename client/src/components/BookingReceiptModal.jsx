@@ -143,69 +143,76 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white rounded-2xl max-w-3xl w-full shadow-2xl border border-slate-200 overflow-hidden my-3 sm:my-6 print:my-0 print:shadow-none print:border-none print:max-w-none animate-in fade-in zoom-in-95 duration-150">
+      <div className="bg-white rounded-2xl max-w-3xl w-full shadow-2xl border border-slate-200 overflow-hidden my-2 sm:my-6 print:my-0 print:shadow-none print:border-none print:max-w-none animate-in fade-in zoom-in-95 duration-150">
         {/* Modal Controls (Hidden in Print) */}
-        <div className="px-4 py-2.5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 print:hidden">
+        <div className="px-3 sm:px-4 py-2.5 bg-slate-900 text-white flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 border-b border-slate-800 print:hidden">
           <button
+            type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 hover:text-white transition shadow-sm"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 hover:text-white transition shadow-xs min-h-[44px]"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-blue-400" />
-            <span>&larr; Return to Dashboard</span>
+            <ArrowLeft className="w-4 h-4 text-blue-400" />
+            <span>Return to Dashboard</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2 flex-wrap">
             <button
+              type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold rounded-xl shadow-md transition"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold rounded-xl shadow-md transition min-h-[44px]"
               title="Print 1-Page Receipt"
             >
-              <Printer className="w-3.5 h-3.5" />
+              <Printer className="w-4 h-4" />
               <span>Print Receipt</span>
             </button>
             <button
+              type="button"
               onClick={handleDownloadPdf}
               disabled={isGeneratingPdf}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl shadow-md transition disabled:opacity-60"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl shadow-md transition disabled:opacity-60 min-h-[44px]"
               title="Download Strict Single-Page PDF"
             >
               {isGeneratingPdf ? (
                 <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                   <span>Generating PDF...</span>
                 </>
               ) : (
                 <>
-                  <Download className="w-3.5 h-3.5" />
+                  <Download className="w-4 h-4" />
                   <span>Download PDF (1 Page)</span>
                 </>
               )}
             </button>
             <button
+              type="button"
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition"
+              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition min-w-[44px] min-h-[44px] flex items-center justify-center"
               title="Close (ESC)"
+              aria-label="Close modal"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        {/* Printable Official Receipt Body - Exactly matches reference image layout */}
-        <div
-          id="booking-receipt-printable"
-          className="receipt-print-area bg-white max-w-[724px] mx-auto box-border p-2 sm:p-3 print:p-0 print:m-0"
-          style={{ boxSizing: 'border-box' }}
-        >
+        {/* Responsive Mobile Container */}
+        <div className="w-full overflow-x-hidden p-1.5 sm:p-3 print:p-0 print:overflow-visible">
+          {/* Printable Official Receipt Body - Exactly matches reference image layout */}
+          <div
+            id="booking-receipt-printable"
+            className="receipt-print-area bg-white w-full max-w-[724px] mx-auto box-border p-2 sm:p-3 print:p-0 print:m-0"
+            style={{ boxSizing: 'border-box' }}
+          >
           {/* Outer Border Box with Navy Border matching reference */}
           <div className="border-2 border-[#0b2545] rounded-xl overflow-hidden bg-white shadow-xs">
             {/* Inner Content Padding */}
             <div className="p-3 sm:p-4 print:p-3 space-y-2.5 print:space-y-2">
               
               {/* Header: Founder Portrait Left | College Name Center | Crest Right */}
-              <div className="flex items-center justify-between gap-3 pb-2 border-b-2 border-[#0b2545]">
+              <div className="flex items-center justify-between gap-2 sm:gap-3 pb-2 border-b-2 border-[#0b2545]">
                 {/* Founder's Portrait Left */}
-                <div className="w-[62px] h-[78px] flex-shrink-0 rounded border border-slate-300 overflow-hidden shadow-xs bg-slate-50 flex items-center justify-center">
+                <div className="w-12 h-14 sm:w-[62px] sm:h-[78px] flex-shrink-0 rounded border border-slate-300 overflow-hidden shadow-xs bg-slate-50 flex items-center justify-center">
                   <img
                     src="/images/founder.png"
                     alt="Founder"
@@ -217,30 +224,30 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
                 </div>
 
                 {/* College Official Details Center */}
-                <div className="text-center flex-1 px-1">
-                  <h1 className="text-[13px] sm:text-[14px] font-black text-[#0b2545] tracking-tight uppercase leading-snug">
+                <div className="text-center flex-1 px-1 min-w-0">
+                  <h1 className="text-[11px] sm:text-[14px] font-black text-[#0b2545] tracking-tight uppercase leading-snug">
                     DHARMAMURTHI RAO BAHADUR CALAVALA CUNNAN
                   </h1>
-                  <h2 className="text-[13px] sm:text-[14px] font-black text-[#0b2545] tracking-tight uppercase leading-snug">
+                  <h2 className="text-[11px] sm:text-[14px] font-black text-[#0b2545] tracking-tight uppercase leading-snug">
                     CHETTY’S (DRBCC) HINDU COLLEGE
                   </h2>
-                  <h3 className="text-[11px] sm:text-[12px] font-extrabold text-[#0b2545] uppercase tracking-wide mt-0.5">
+                  <h3 className="text-[9.5px] sm:text-[12px] font-extrabold text-[#0b2545] uppercase tracking-wide mt-0.5">
                     (AUTONOMOUS)
                   </h3>
-                  <p className="text-[8.5px] sm:text-[9.5px] font-bold text-[#1e3a8a] uppercase tracking-wider mt-0.5">
+                  <p className="text-[7.5px] sm:text-[9.5px] font-bold text-[#1e3a8a] uppercase tracking-wider mt-0.5">
                     NIV INSTITUTION-AFFILIATED TO THE UNIVERSITY OF MADRAS
                   </p>
-                  <p className="text-[8.5px] sm:text-[9.5px] font-bold text-[#1e3a8a] uppercase tracking-wider">
+                  <p className="text-[7.5px] sm:text-[9.5px] font-bold text-[#1e3a8a] uppercase tracking-wider">
                     PATTABIRAM, CHENNAI – 600072
                   </p>
                 </div>
 
                 {/* College Crest Right */}
-                <div className="w-[74px] h-[78px] flex-shrink-0 flex items-center justify-center">
+                <div className="w-12 h-14 sm:w-[74px] sm:h-[78px] flex-shrink-0 flex items-center justify-center">
                   <img
                     src="/images/crest_emblem.png"
                     alt="DRBCCC Crest Emblem"
-                    className="max-h-[76px] w-auto object-contain"
+                    className="max-h-12 sm:max-h-[76px] w-auto object-contain"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = "/images/logo.png";
@@ -251,28 +258,28 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
 
               {/* Receipt Title Banner - Centered Dark Navy Pill */}
               <div className="text-center pt-0.5">
-                <div className="inline-block px-7 py-1 bg-[#0b2545] text-white rounded-full shadow-xs">
-                  <span className="text-[11px] sm:text-[12px] font-black tracking-wider uppercase">
+                <div className="inline-block px-5 sm:px-7 py-1 bg-[#0b2545] text-white rounded-full shadow-xs">
+                  <span className="text-[10px] sm:text-[12px] font-black tracking-wider uppercase">
                     OFFICIAL VENUE ALLOCATION RECEIPT
                   </span>
                 </div>
               </div>
 
-              {/* Reference & Status Bar: 3 Columns with Vertical Dividers */}
-              <div className="grid grid-cols-3 bg-[#f0f5ff] rounded-lg border border-[#c7d9f8] text-xs overflow-hidden">
+              {/* Reference & Status Bar: Responsive Stacking on Mobile, 3 Columns on Tablet/Desktop/Print */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 print:grid-cols-3 bg-[#f0f5ff] rounded-lg border border-[#c7d9f8] text-xs overflow-hidden divide-y sm:divide-y-0 sm:divide-x print:divide-y-0 print:divide-x divide-[#c7d9f8]">
                 {/* Column 1: Booking Reference ID */}
-                <div className="p-2 sm:px-3 border-r border-[#c7d9f8] flex flex-col justify-center">
+                <div className="p-2 sm:px-3 flex flex-col justify-center">
                   <div className="flex items-center gap-1.5 text-slate-700 font-bold text-[9px] uppercase tracking-wider">
                     <FileText className="w-3.5 h-3.5 text-blue-700 flex-shrink-0" />
                     <span>BOOKING REFERENCE ID</span>
                   </div>
-                  <div className="text-[15px] sm:text-[16px] font-black text-[#0e4a86] tracking-wide mt-0.5">
+                  <div className="text-[14px] sm:text-[16px] font-black text-[#0e4a86] tracking-wide mt-0.5">
                     {booking.booking_id}
                   </div>
                 </div>
 
                 {/* Column 2: Booking Status */}
-                <div className="p-2 sm:px-3 border-r border-[#c7d9f8] flex flex-col justify-center items-center text-center">
+                <div className="p-2 sm:px-3 flex flex-col justify-center items-center text-center">
                   <div className="flex items-center gap-1 text-slate-700 font-bold text-[9px] uppercase tracking-wider">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
                     <span>BOOKING STATUS</span>
@@ -294,14 +301,14 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
                     <Calendar className="w-3.5 h-3.5 text-blue-700 flex-shrink-0" />
                     <span>CREATED ON</span>
                   </div>
-                  <div className="text-[11px] font-bold text-[#0e4a86] mt-0.5 leading-tight">
+                  <div className="text-[10px] sm:text-[11px] font-bold text-[#0e4a86] mt-0.5 leading-tight">
                     {formatTimestamp(booking.created_at)}
                   </div>
                 </div>
               </div>
 
-              {/* 2x2 Information Cards Grid */}
-              <div className="grid grid-cols-2 gap-2.5 text-xs">
+              {/* 2x2 Information Cards Grid: Responsive Stacking on Mobile, 2 Columns on Desktop/Print */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 print:grid-cols-2 gap-2 sm:gap-2.5 text-xs">
                 
                 {/* Card 1 (Top Left): PROGRAMME & DEPARTMENT DETAILS */}
                 <div className="border border-[#bfdbfe] rounded-lg overflow-hidden bg-white flex flex-col">
@@ -498,10 +505,10 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
               </div>
 
               {/* Footer: Digital Authentication | 3 Signatures | QR Code */}
-              <div className="pt-2 flex items-center justify-between gap-2">
+              <div className="pt-2 flex flex-col sm:flex-row print:flex-row items-center justify-between gap-2.5 sm:gap-2">
                 
                 {/* Left: Digital Authentication Stamp */}
-                <div className="flex items-center gap-2 max-w-[210px]">
+                <div className="flex items-center gap-2 max-w-full sm:max-w-[210px] print:max-w-[210px]">
                   <div className="w-7 h-7 rounded-full bg-blue-950 text-white flex items-center justify-center flex-shrink-0">
                     <ShieldCheck className="w-4 h-4 text-white" />
                   </div>
@@ -517,7 +524,7 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
                 </div>
 
                 {/* Middle: 3 Signatures with Vertical Dividers */}
-                <div className="flex-1 flex items-center justify-around border-l border-r border-slate-200 px-2">
+                <div className="w-full sm:w-auto print:w-auto flex-1 flex items-center justify-around border-y sm:border-y-0 sm:border-l sm:border-r print:border-y-0 print:border-l print:border-r border-slate-200 py-1.5 sm:py-0 print:py-0 px-2">
                   {/* Coordinator Signature */}
                   <div className="text-center flex flex-col items-center px-1">
                     <div className="h-6 flex items-center justify-center">
@@ -534,7 +541,7 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
                       <img src="/images/sig_hod.png" alt="Signature" className="h-5 w-auto object-contain" />
                     </div>
                     <div className="text-[7.5px] font-bold text-slate-700 mt-1">
-                      Head of the Department (HOD)
+                      Head of Department
                     </div>
                   </div>
 
@@ -544,7 +551,7 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
                       <img src="/images/sig_principal.png" alt="Signature" className="h-5 w-auto object-contain" />
                     </div>
                     <div className="text-[7.5px] font-bold text-slate-700 mt-1">
-                      Principal / Admin Authority
+                      Principal Authority
                     </div>
                   </div>
                 </div>
@@ -567,6 +574,7 @@ export default function BookingReceiptModal({ booking, profile, onClose }) {
               Knowledge &bull; Discipline &bull; Excellence
             </div>
           </div>
+        </div>
         </div>
 
         {/* Bottom Actions (Hidden in Print) */}

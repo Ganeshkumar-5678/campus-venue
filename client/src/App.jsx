@@ -17,6 +17,7 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [showAbout, setShowAbout] = useState(false);
   const [initializing, setInitializing] = useState(true);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     initApp();
@@ -50,17 +51,24 @@ export default function App() {
     localStorage.removeItem('token');
     setUser(null);
     setCurrentTab('dashboard');
+    setMobileNavOpen(false);
   };
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
     setCurrentTab('dashboard');
+    setMobileNavOpen(false);
+  };
+
+  const handleTabChange = (tabId) => {
+    setCurrentTab(tabId);
+    setMobileNavOpen(false);
   };
 
   if (initializing) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">
-        <div className="flex flex-col items-center space-y-4">
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white p-4">
+        <div className="flex flex-col items-center space-y-4 text-center">
           <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           <div className="text-sm font-bold tracking-wide uppercase">
             Connecting to DRBCCC Hindu College Database...
@@ -97,9 +105,9 @@ export default function App() {
         ) : (
           <DepartmentDashboardView
             user={user}
-            onNavigateToBooking={() => setCurrentTab('new-booking')}
-            onNavigateToVoice={() => setCurrentTab('voice-booking')}
-            onNavigateToHistory={() => setCurrentTab('history')}
+            onNavigateToBooking={() => handleTabChange('new-booking')}
+            onNavigateToVoice={() => handleTabChange('voice-booking')}
+            onNavigateToHistory={() => handleTabChange('history')}
           />
         );
 
@@ -107,8 +115,9 @@ export default function App() {
         return (
           <NewBookingFlow
             user={user}
-            onBookingComplete={() => setCurrentTab('history')}
-            onCancel={() => setCurrentTab('dashboard')}
+            profile={profile}
+            onBookingComplete={() => handleTabChange('history')}
+            onCancel={() => handleTabChange('dashboard')}
           />
         );
 
@@ -123,8 +132,8 @@ export default function App() {
         return (
           <AIVoiceBookingView
             user={user}
-            onBookingSuccess={() => setCurrentTab('history')}
-            onBackToDashboard={() => setCurrentTab('dashboard')}
+            onBookingSuccess={() => handleTabChange('history')}
+            onBackToDashboard={() => handleTabChange('dashboard')}
           />
         );
 
@@ -177,37 +186,40 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Top Navbar with Official Branding & Principal / About info */}
+      {/* Top Navbar with Official Branding & Hamburger on Mobile */}
       <Navbar
         user={user}
         profile={profile}
         onLogout={handleLogout}
         onOpenAbout={() => setShowAbout(true)}
+        onToggleMobileNav={() => setMobileNavOpen(prev => !prev)}
       />
 
-      <div className="flex-1 flex">
-        {/* Left Sidebar */}
+      <div className="flex-1 flex min-w-0">
+        {/* Sidebar (Desktop static / Mobile slide-out drawer) */}
         <Sidebar
           currentTab={currentTab}
-          setTab={setCurrentTab}
+          setTab={handleTabChange}
           user={user}
           onLogout={handleLogout}
+          isOpen={mobileNavOpen}
+          onClose={() => setMobileNavOpen(false)}
         />
 
         {/* Main Content Body */}
-        <main className="flex-1 p-6 lg:p-8 max-w-7xl mx-auto w-full overflow-y-auto">
+        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full min-w-0 overflow-y-auto">
           {renderContent()}
         </main>
       </div>
 
       {/* Official Footer with Verified Contact details */}
-      <footer className="bg-white border-t border-slate-200 py-4 px-6 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <div className="flex items-center space-x-2 text-center sm:text-left">
-          <span>{profile?.college_name}</span>
+      <footer className="bg-white border-t border-slate-200 py-3.5 px-4 sm:px-6 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 print:hidden">
+        <div className="flex items-center space-x-2 text-center sm:text-left min-w-0 max-w-full">
+          <span className="truncate max-w-full block font-medium">{profile?.college_name || 'DRBCCC Hindu College'}</span>
           <span className="hidden sm:inline">&bull;</span>
-          <span className="hidden sm:inline">Ph: {profile?.official_phone_numbers}</span>
+          <span className="hidden sm:inline flex-shrink-0">Ph: {profile?.official_phone_numbers || '044-26850620'}</span>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 flex-shrink-0">
           <a
             href={profile?.official_website || "https://www.drbccchinducollege.edu.in/"}
             target="_blank"
@@ -217,6 +229,7 @@ export default function App() {
             Official Website
           </a>
           <button
+            type="button"
             onClick={() => setShowAbout(true)}
             className="text-slate-600 hover:text-slate-900 font-semibold"
           >

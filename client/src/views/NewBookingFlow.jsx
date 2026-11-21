@@ -147,18 +147,19 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-12">
+    <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6 pb-12">
       {/* Top Breadcrumb & Progress Step Indicator */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between print:hidden">
+      <div className="bg-white rounded-2xl p-3 sm:p-4 border border-slate-200 shadow-xs flex items-center justify-between print:hidden gap-2">
         <button
+          type="button"
           onClick={step === 1 ? onCancel : () => setStep(prev => prev - 1)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition min-h-[40px] flex-shrink-0"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{step === 1 ? 'Back to Dashboard' : 'Back'}</span>
+          <span className="hidden xs:inline">{step === 1 ? 'Back to Dashboard' : 'Back'}</span>
         </button>
 
-        <div className="flex items-center space-x-2 sm:space-x-4">
+        <div className="flex items-center space-x-1.5 sm:space-x-4">
           <div className="flex items-center space-x-1.5">
             <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
               step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'
@@ -166,7 +167,7 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
             <span className={`text-xs font-bold hidden sm:inline ${step >= 1 ? 'text-slate-900' : 'text-slate-400'}`}>Date & Time</span>
           </div>
 
-          <div className={`w-6 sm:w-10 h-0.5 ${step >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`} />
+          <div className={`w-4 sm:w-10 h-0.5 ${step >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`} />
 
           <div className="flex items-center space-x-1.5">
             <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
@@ -175,7 +176,7 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
             <span className={`text-xs font-bold hidden sm:inline ${step >= 2 ? 'text-slate-900' : 'text-slate-400'}`}>Venue</span>
           </div>
 
-          <div className={`w-6 sm:w-10 h-0.5 ${step >= 3 ? 'bg-blue-600' : 'bg-slate-200'}`} />
+          <div className={`w-4 sm:w-10 h-0.5 ${step >= 3 ? 'bg-blue-600' : 'bg-slate-200'}`} />
 
           <div className="flex items-center space-x-1.5">
             <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
@@ -184,7 +185,7 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
             <span className={`text-xs font-bold hidden sm:inline ${step >= 3 ? 'text-slate-900' : 'text-slate-400'}`}>Details</span>
           </div>
 
-          <div className={`w-6 sm:w-10 h-0.5 ${step >= 4 ? 'bg-blue-600' : 'bg-slate-200'}`} />
+          <div className={`w-4 sm:w-10 h-0.5 ${step >= 4 ? 'bg-blue-600' : 'bg-slate-200'}`} />
 
           <div className="flex items-center space-x-1.5">
             <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
@@ -203,10 +204,10 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
       )}
 
       {/* =========================================================
-          STEP 1: DATE & TIME SELECTION (Step 3 in reference image)
+          STEP 1: DATE & TIME SELECTION
       ========================================================= */}
       {step === 1 && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 max-w-xl mx-auto">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-8 max-w-xl mx-auto">
           <div className="text-left mb-6">
             <h3 className="text-xl font-black text-slate-900">
               Select Date & Time
@@ -216,7 +217,7 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
             </p>
           </div>
 
-          <form onSubmit={handleCheckAvailability} className="space-y-5">
+          <form onSubmit={handleCheckAvailability} className="space-y-4 sm:space-y-5">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Event Date
@@ -226,11 +227,11 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
                 required
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[44px]"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   Start Time
@@ -238,7 +239,7 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
                 <select
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[44px]"
                 >
                   {timeOptions.map((t) => (
                     <option key={t} value={t}>{t}</option>
@@ -253,7 +254,7 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
                 <select
                   value={endTime}
                   onChange={(e) => setEndTime(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none min-h-[44px]"
                 >
                   {timeOptions.map((t) => (
                     <option key={t} value={t}>{t}</option>
@@ -269,18 +270,18 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
               </span>
             </div>
 
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pt-2">
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition"
+                className="w-full sm:w-auto px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition min-h-[44px]"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={checkingAvailability}
-                className="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2"
+                className="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2 min-h-[44px]"
               >
                 <span>{checkingAvailability ? 'Checking Availability...' : 'Check Venue Availability'}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -446,22 +447,24 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
           </div>
 
           {/* Navigation buttons */}
-          <div className="flex items-center justify-between pt-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4">
             <button
+              type="button"
               onClick={() => setStep(1)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs rounded-xl transition"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs rounded-xl transition min-h-[44px]"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Date & Time</span>
             </button>
 
             <button
+              type="button"
               onClick={() => {
                 if (selectedVenue) setStep(3);
                 else setBookingError('Please choose an available hall to proceed');
               }}
               disabled={!selectedVenue}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-blue-600/30 transition"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-blue-600/30 transition min-h-[44px]"
             >
               <span>Proceed to Programme Details</span>
               <ArrowRight className="w-4 h-4" />
@@ -714,28 +717,28 @@ export default function NewBookingFlow({ user, profile, onBookingComplete, onCan
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-5 py-2.5 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs rounded-xl transition flex items-center gap-1.5"
+                className="px-5 py-3 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 min-h-[44px]"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Venue Selection</span>
               </button>
 
-              <div className="flex items-center space-x-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="px-4 py-2.5 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl hover:bg-slate-200 transition"
+                  className="px-4 py-3 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl hover:bg-slate-200 transition min-h-[44px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-blue-600/30 transition disabled:opacity-50"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-blue-600/30 transition disabled:opacity-50 min-h-[44px]"
                 >
                   {submitting ? 'Confirming in Database...' : 'Book Venue'}
                 </button>

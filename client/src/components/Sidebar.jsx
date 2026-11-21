@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   LayoutDashboard,
   PlusCircle,
@@ -12,12 +12,24 @@ import {
   DoorOpen,
   FileClock,
   ShieldCheck,
-  Settings,
-  LogOut
+  LogOut,
+  X
 } from 'lucide-react';
 
-export default function Sidebar({ currentTab, setTab, user, onLogout }) {
+export default function Sidebar({ currentTab, setTab, user, onLogout, isOpen, onClose }) {
   const isAdmin = user?.role === 'admin';
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   const navItems = [
     { id: 'dashboard', label: isAdmin ? 'Admin Dashboard' : 'Dashboard', icon: LayoutDashboard },
@@ -36,21 +48,40 @@ export default function Sidebar({ currentTab, setTab, user, onLogout }) {
     { id: 'admin-audit', label: 'Audit Logs', icon: FileClock },
   ];
 
-  return (
-    <aside className="w-64 bg-[#0a192f] text-slate-300 flex flex-col flex-shrink-0 min-h-screen border-r border-slate-800">
-      {/* Brand */}
-      <div className="p-5 border-b border-slate-800 flex items-center space-x-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black shadow-lg shadow-blue-500/20">
-          <DoorOpen className="w-6 h-6" />
-        </div>
-        <div>
-          <div className="text-base font-bold text-white tracking-wide flex items-center gap-1.5">
-            CampusVenue
+  const handleSelectTab = (tabId) => {
+    setTab(tabId);
+    if (onClose) onClose();
+  };
+
+  const navContent = (
+    <div className="flex flex-col h-full">
+      {/* Brand & Mobile Close button */}
+      <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black shadow-lg shadow-blue-500/20 flex-shrink-0">
+            <DoorOpen className="w-6 h-6" />
           </div>
-          <p className="text-[10px] text-blue-400 font-medium uppercase tracking-wider">
-            DRBCCC Hindu College
-          </p>
+          <div>
+            <div className="text-base font-bold text-white tracking-wide flex items-center gap-1.5">
+              CampusVenue
+            </div>
+            <p className="text-[10px] text-blue-400 font-medium uppercase tracking-wider">
+              DRBCCC Hindu College
+            </p>
+          </div>
         </div>
+
+        {/* Close Button for mobile drawer */}
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="md:hidden p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition min-w-[44px] min-h-[44px] flex items-center justify-center"
+            aria-label="Close navigation drawer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Main Navigation */}
@@ -64,8 +95,9 @@ export default function Sidebar({ currentTab, setTab, user, onLogout }) {
           return (
             <button
               key={item.id}
-              onClick={() => setTab(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+              type="button"
+              onClick={() => handleSelectTab(item.id)}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition-all min-h-[44px] ${
                 isActive
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
                   : item.highlight
@@ -74,7 +106,7 @@ export default function Sidebar({ currentTab, setTab, user, onLogout }) {
               }`}
             >
               <div className="flex items-center gap-3">
-                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : item.highlight ? 'text-blue-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : item.highlight ? 'text-blue-400' : 'text-slate-400'}`} />
                 <span>{item.label}</span>
               </div>
               {item.badge && (
@@ -99,15 +131,16 @@ export default function Sidebar({ currentTab, setTab, user, onLogout }) {
               return (
                 <button
                   key={item.id}
-                  onClick={() => setTab(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  type="button"
+                  onClick={() => handleSelectTab(item.id)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all min-h-[40px] ${
                     isActive
                       ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30'
                       : 'text-slate-400 hover:bg-slate-800/80 hover:text-amber-300'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 flex-shrink-0" />
                     <span>{item.label}</span>
                   </div>
                 </button>
@@ -119,8 +152,8 @@ export default function Sidebar({ currentTab, setTab, user, onLogout }) {
 
       {/* Footer Info / Logout */}
       <div className="p-4 border-t border-slate-800 bg-[#081325]">
-        <div className="flex items-center justify-between">
-          <div className="text-left overflow-hidden">
+        <div className="flex items-center justify-between gap-2">
+          <div className="text-left overflow-hidden min-w-0">
             <div className="text-xs font-bold text-slate-200 truncate">
               {user?.user_name || 'Department User'}
             </div>
@@ -129,14 +162,43 @@ export default function Sidebar({ currentTab, setTab, user, onLogout }) {
             </div>
           </div>
           <button
+            type="button"
             onClick={onLogout}
-            className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition"
+            className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition min-w-[40px] min-h-[40px] flex items-center justify-center flex-shrink-0"
             title="Log out"
           >
             <LogOut className="w-4 h-4" />
           </button>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* 1. Desktop Fixed Sidebar (Preserved exactly for desktop monitors & tablets) */}
+      <aside className="hidden md:flex w-64 bg-[#0a192f] text-slate-300 flex-col flex-shrink-0 min-h-screen border-r border-slate-800">
+        {navContent}
+      </aside>
+
+      {/* 2. Mobile Drawer Backdrop Overlay */}
+      <div
+        className={`fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-40 transition-opacity duration-300 md:hidden ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* 3. Mobile Navigation Drawer */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0a192f] text-slate-300 flex flex-col border-r border-slate-800 shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+        aria-label="Mobile Navigation Drawer"
+      >
+        {navContent}
+      </aside>
+    </>
   );
 }

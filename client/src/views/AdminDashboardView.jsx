@@ -273,25 +273,25 @@ export default function AdminDashboardView({ activeSubTab = 'overview', profile,
   const kpis = analytics?.kpis || {};
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Top Banner & Tab Navigation */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-4 sm:p-6 space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-full text-xs font-bold mb-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
               <span>Admin Management Portal</span>
             </div>
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">
               Admin Dashboard & Master Data
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
               Read directly from relational database &bull; Configure college profile, departments, users & venues
             </p>
           </div>
 
-          {/* Sub-tab navigation */}
-          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100 rounded-xl">
+          {/* Sub-tab navigation with Horizontal Scroll on Mobile */}
+          <div className="flex overflow-x-auto gap-1.5 p-1 bg-slate-100 rounded-xl max-w-full">
             {[
               { id: 'overview', label: 'Analytics & KPIs' },
               { id: 'profile', label: 'College Profile' },
@@ -304,10 +304,11 @@ export default function AdminDashboardView({ activeSubTab = 'overview', profile,
             ].map(tab => (
               <button
                 key={tab.id}
+                type="button"
                 onClick={() => setSubTab(tab.id)}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition ${
+                className={`px-3 py-2 text-xs font-bold rounded-lg transition whitespace-nowrap min-h-[38px] flex-shrink-0 ${
                   subTab === tab.id
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-600 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >

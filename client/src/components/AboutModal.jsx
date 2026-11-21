@@ -5,35 +5,37 @@ export default function AboutModal({ profile, onClose }) {
   if (!profile) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-3xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white rounded-2xl max-w-3xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-4">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 relative">
+        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-4 sm:p-6 relative">
           <button
+            type="button"
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition min-w-[40px] min-h-[40px] flex items-center justify-center"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3 sm:space-x-4 pr-8 sm:pr-0">
             <img
               src="/images/logo.png"
               alt="College Crest"
-              className="h-16 w-16 bg-white/10 p-1.5 rounded-xl object-contain border border-white/20"
+              className="h-12 w-12 sm:h-16 sm:w-16 bg-white/10 p-1.5 rounded-xl object-contain border border-white/20 flex-shrink-0"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "https://www.drbccchinducollege.edu.in/images/logo-hindu-college2.png";
               }}
             />
-            <div>
-              <div className="inline-block px-2.5 py-0.5 bg-blue-500/30 border border-blue-400/40 rounded-full text-[11px] font-semibold tracking-wide text-blue-200 mb-1">
+            <div className="min-w-0">
+              <div className="inline-block px-2.5 py-0.5 bg-blue-500/30 border border-blue-400/40 rounded-full text-[10px] sm:text-[11px] font-semibold tracking-wide text-blue-200 mb-1">
                 Verified Institutional Information
               </div>
-              <h2 className="text-lg sm:text-xl font-extrabold tracking-tight">
+              <h2 className="text-base sm:text-xl font-extrabold tracking-tight leading-snug break-words">
                 {profile.college_name}
               </h2>
-              <p className="text-xs text-blue-200/90 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-blue-200/90 mt-0.5 line-clamp-2">
                 {profile.director_info}
               </p>
             </div>
@@ -41,7 +43,7 @@ export default function AboutModal({ profile, onClose }) {
         </div>
 
         {/* Content Body */}
-        <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-h-[75vh] overflow-y-auto">
           {/* Key Facts */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-3.5 bg-slate-50 border border-slate-100 rounded-xl flex items-start space-x-3">
